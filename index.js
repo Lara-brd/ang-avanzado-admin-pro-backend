@@ -15,21 +15,16 @@ const app = express();
 //use -> middelware-> ejecuta siempre su instrucción cada vez que alguien pasa por aquí.
 app.use(cors());
 
-console.log(process.env);
+//Lectura y parseo del body (Importante ponerlo antes de las rutas)
+app.use(express.json());
 
 //base de datos
 dbConnection();
 
 //Rutas
-//ponemos que se va a ejecutar cuando alguien haga una solicitud al / de mi aplicación
-app.get('/', (req, res) => {
+app.use('/api/usuarios', require('./routes/usuarios'));
+app.use('/api/login', require('./routes/auth'))
 
-    res.json({
-        ok:true,
-        msg:'Hola mundo'
-    });
-
-});
 
 //para lebantar el servidor
 app.listen( process.env.PORT, () => {
