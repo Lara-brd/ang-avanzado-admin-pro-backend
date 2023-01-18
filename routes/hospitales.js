@@ -13,7 +13,8 @@ const {
     crearHospital,
     actualizarHospital,
     borrarHospital
-} = require('../controllers/hospitales')
+} = require('../controllers/hospitales');
+const { JWT } = require('google-auth-library');
 
 const router = Router();
 
@@ -29,10 +30,15 @@ router.post('/',
     crearHospital );
 
 router.put('/:id', 
-    [], 
+    [
+        validarJWT,
+        check('nombre', 'El nombre del hospital es necesario').not().isEmpty(),
+        validarCampos
+    ], 
     actualizarHospital );
 
 router.delete('/:id',
+    validarJWT,
     borrarHospital
 );
 

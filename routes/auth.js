@@ -3,31 +3,38 @@
     Path: '/api/login 
  */
 
-const { Router } = require('express');
-const { check } = require('express-validator');
-const { login, googleSignIn } = require('../controllers/auth');
-const { validarCampos } = require('../middlewares/validar-campos');
+    const { Router } = require('express');
+    const { check } = require('express-validator');
+    const { login, googleSignIn, renewToken } = require('../controllers/auth');
+    const { validarCampos } = require('../middlewares/validar-campos');
+    const { validarJWT} = require('../middlewares/validar-jwt');
+    
+    const router = Router();
+    
+    //vamo a crear la ruta
+    router.post('/', 
+        [
+            check('email', 'El email es obligatorio').isEmail(),
+            check('password', 'El password es obligatorio').not().isEmpty(),
+            validarCampos
+        ],
+        login
+    )
+    
+    
+    router.post('/google', 
+        [
+            check('token', 'El token de google es obligatorio').not().isEmpty(),
+            validarCampos
+        ],
+        googleSignIn 
+    )
 
-const router = Router();
+    router.get( '/renew',
+        validarJWT,
+        renewToken
 
-//vamo a crear la ruta
-router.post('/', 
-    [
-        check('email', 'El email es obligatorio').isEmail(),
-        check('password', 'El password es obligatorio').not().isEmpty(),
-        validarCampos
-    ],
-    login
-)
-
-
-router.post('/google', 
-    [
-        check('token', 'El token de google es obligatorio').not().isEmpty(),
-        validarCampos
-    ],
-    googleSignIn 
-)
-
-
-module.exports = router;
+         )
+    
+    
+    module.exports = router;
