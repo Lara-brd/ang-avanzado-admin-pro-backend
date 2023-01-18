@@ -15,6 +15,9 @@ const app = express();
 //use -> middelware-> ejecuta siempre su instrucción cada vez que alguien pasa por aquí.
 app.use(cors());
 
+//Carpeta pública
+app.use( express.static('public') );
+
 //Lectura y parseo del body (Importante ponerlo antes de las rutas)
 app.use(express.json());
 
